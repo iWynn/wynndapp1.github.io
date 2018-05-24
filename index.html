@@ -89,39 +89,39 @@
               <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
                 <div class="layui-tab-item layui-show">
                   <div class="layui-form layui-form-pane">
-                    <form method="post">
+                      <form class="layui-form" action="">
                       <div class="layui-form-item">
                         <label for="L_email" class="layui-form-label">游戏名</label>
                         <div class="layui-input-inline">
-                          <input type="text" id="L_email" name="email" required lay-verify="email" autocomplete="off" class="layui-input">
+                          <input type="text" id="L_email" name="gameName" required lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                       </div>
                       <div class="layui-form-item">
                         <label for="L_username" class="layui-form-label">游戏昵称</label>
                         <div class="layui-input-inline">
-                          <input type="text" id="L_username" name="username" required lay-verify="required" autocomplete="off" class="layui-input">
+                          <input type="text" id="L_username" name="nickName" required lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                       </div>
                       <div class="layui-form-item">
                         <label for="L_pass" class="layui-form-label">服务器</label>
                         <div class="layui-input-inline">
-                          <input type="password" id="L_pass" name="pass" required lay-verify="required" autocomplete="off" class="layui-input">
+                          <input type="text" id="L_pass" name="serverName" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                       </div>
                       <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label">公会名称</label>
                         <div class="layui-input-inline">
-                          <input type="password" id="L_repass" name="repass" required lay-verify="required" autocomplete="off" class="layui-input">
+                          <input type="text" id="L_repass" name="partyName" lay-verify="required" autocomplete="off" class="layui-input">
                         </div>
                       </div>
                       <div class="layui-form-item">
-                        <label for="L_vercode" class="layui-form-label">留言</label>
+                        <label for="L_vercode" class="layui-form-label" >留言</label>
                         <div class="layui-input-inline">
-                          <input type="text" id="L_vercode" name="vercode" required lay-verify="required" autocomplete="off" class="layui-input">
+                          <input type="text" id="L_vercode" name="msg" autocomplete="off" class="layui-input">
                         </div>
                       </div>
                       <div class="layui-form-item">
-                        <button class="layui-btn" lay-filter="*" lay-submit>立即录入</button>
+                        <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即录入</button>
                       </div>
                     </form>
                   </div>
@@ -214,23 +214,9 @@
 
         });
       };
-
-      //Send transaction (here is smart contract call)
-      serialNumber = nebPay.simulateCall(to, value, callFunction, callArgs, options, {
-        listener: (res) => {
-          console.log('listener', res)
-          try {
-            resolve(JSON.parse(res.result))
-          } catch (e) {
-            reject(res.result)
-          }
-        }
-      })
     }
 
     window.onload = searchPublicPlan;
-
-
 
     //initiate the transaction with a button click, here is an example of calling a smart contract
     function onButtonClick() {
@@ -279,6 +265,8 @@
           console.log(err);
         });
     }
+
+    
   </script>
   <script id="demo" type="text/html">
     {{#  layui.each(d, function(index, item){ }}
@@ -290,7 +278,41 @@
 
     {{#  }); }}
     </script>
+    <script type="text/javascript">
 
+    	var NebPay = require("nebpay");
+    	var nebPay = new NebPay();
+    	var dappAddress = "n1v8e45CvAZB3Uj6gHFPm3aEveSuzLse3Qm";
+
+    	if (typeof(webExtensionWallet) === "undefined") {
+	        alert("请首先安装webExtensionWallet插件");
+	    } 
+      layui.use('form', function(){
+          var form = layui.form;
+          //监听提交
+          form.on('submit(formDemo)', function(data){
+            //layer.msg(JSON.stringify(data.field));
+            var dappAddress = "n1kzW2iPXVpXUvWbpZoLHYswwZvQwEaRjuX";
+            var to = dappAddress
+            var  value = "0"
+            var  callFunction = "save" //the function name to be called
+            var callArgs = "[\"" +data.field.gameName+"\",\""+data.field.nickName+"\",\""+data.field.serverName+"\",\""+data.field.partyName+"\",\""+data.field.msg+"\"]"; 
+            console.log(callArgs)
+            //Send transaction (here is smart contract call)
+            serialNumber = nebPay.Call(to, value, callFunction, callArgs, options, {
+              listener: (res) => {
+                console.log('listener', res)
+                try {
+                  resolve(JSON.parse(res.result))
+                } catch (e) {
+                  reject(res.result)
+                }
+              }
+            })
+            return false;
+          });
+        });
+    </script>
 </body>
 
 </html>
