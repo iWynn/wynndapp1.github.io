@@ -89,41 +89,41 @@
               <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
                 <div class="layui-tab-item layui-show">
                   <div class="layui-form layui-form-pane">
-                    <form class="layui-form" action="">
-                      <div class="layui-form-item">
-                        <label for="L_email" class="layui-form-label">游戏名</label>
-                        <div class="layui-input-inline">
-                          <input type="text" id="L_email" name="gameName" required lay-verify="required" autocomplete="off" class="layui-input">
-                        </div>
+
+                    <div class="layui-form-item">
+                      <label for="L_email" class="layui-form-label">游戏名</label>
+                      <div class="layui-input-inline">
+                        <input type="text" id="L_email" name="gameName" required lay-verify="required" autocomplete="off" class="layui-input">
                       </div>
-                      <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">游戏昵称</label>
-                        <div class="layui-input-inline">
-                          <input type="text" id="L_username" name="nickName" required lay-verify="required" autocomplete="off" class="layui-input">
-                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                      <label for="L_username" class="layui-form-label">游戏昵称</label>
+                      <div class="layui-input-inline">
+                        <input type="text" id="L_username" name="nickName" required lay-verify="required" autocomplete="off" class="layui-input">
                       </div>
-                      <div class="layui-form-item">
-                        <label for="L_pass" class="layui-form-label">服务器</label>
-                        <div class="layui-input-inline">
-                          <input type="text" id="L_pass" name="serverName" lay-verify="required" autocomplete="off" class="layui-input">
-                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                      <label for="L_pass" class="layui-form-label">服务器</label>
+                      <div class="layui-input-inline">
+                        <input type="text" id="L_pass" name="serverName" lay-verify="required" autocomplete="off" class="layui-input">
                       </div>
-                      <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label">公会名称</label>
-                        <div class="layui-input-inline">
-                          <input type="text" id="L_repass" name="partyName" lay-verify="required" autocomplete="off" class="layui-input">
-                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                      <label for="L_repass" class="layui-form-label">公会名称</label>
+                      <div class="layui-input-inline">
+                        <input type="text" id="L_repass" name="partyName" lay-verify="required" autocomplete="off" class="layui-input">
                       </div>
-                      <div class="layui-form-item">
-                        <label for="L_vercode" class="layui-form-label">留言</label>
-                        <div class="layui-input-inline">
-                          <input type="text" id="L_vercode" name="msg" autocomplete="off" class="layui-input">
-                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                      <label for="L_vercode" class="layui-form-label">留言</label>
+                      <div class="layui-input-inline">
+                        <input type="text" id="L_vercode" name="msg" autocomplete="off" class="layui-input">
                       </div>
-                      <div class="layui-form-item">
-                        <button type="button" class="layui-btn" id="btn_submit" lay-filter="formDemo">立即录入</button>
-                      </div>
-                    </form>
+                    </div>
+                    <div class="layui-form-item">
+                      <button type="button" class="layui-btn" id="btn_submit" lay-filter="formDemo">立即录入</button>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -166,7 +166,7 @@
   <script src="res/layui/layui.js"></script>
   <script type="text/javascript" src="res/js/nebPay.js"></script>
   <script type="text/javascript" src="res/js/jquery-1.8.3.min.js"></script>
-  <script  type="text/javascript">
+  <script type="text/javascript">
     var NebPay = require("nebpay");
     var nebPay = new NebPay();
     var serialNumber; //transaction serial number
@@ -224,52 +224,43 @@
     if (typeof (webExtensionWallet) === "undefined") {
       alert("请首先安装webExtensionWallet插件");
     }
-    $('#btn_submit').click(function(){
+    $('#btn_submit').click(function () {
       var dappAddress = "n1kzW2iPXVpXUvWbpZoLHYswwZvQwEaRjuX";
-        var to = dappAddress
-        var value = "0"
-        var callFunction = "save" //the function name to be called
-        var callArgs = "[\"" + $(" input[ name='gameName' ] ").val()+ "\",\"" + $(" input[ name='nickName' ] ").val() + "\",\"" + $(" input[ name='serverName' ] ").val() +
-          "\",\"" + $(" input[ name='partyName' ] ").val() + "\",\"" + $(" input[ name='msg' ] ").val() + "\"]";
-        console.log(callArgs)
-        //Send transaction (here is smart contract call)
-        serialNumber = nebPay.call(to, value, callFunction, callArgs, {
-          listener: (res) => {
-            console.log('listener', res)
-            try {
-              resolve(JSON.parse(res.result))
-            } catch (e) {
-              reject(res.result)
-            }
+      var to = dappAddress
+      var value = "0"
+      var callFunction = "save" //the function name to be called
+      var callArgs = "[\"" + $(" input[ name='gameName' ] ").val() + "\",\"" + $(" input[ name='nickName' ] ").val() +
+        "\",\"" + $(" input[ name='serverName' ] ").val() +
+        "\",\"" + $(" input[ name='partyName' ] ").val() + "\",\"" + $(" input[ name='msg' ] ").val() + "\"]";
+      console.log(callArgs)
+
+      //Send transaction (here is smart contract call)
+      serialNumber = nebPay.call(to, value, callFunction, callArgs, {
+        listener: (res) => {
+          console.log('listener', res)
+          var index = layer.load();
+          intervalQuery = setInterval(function () {
+            funcIntervalQuery();
+          }, 10000); //it's recommended that the query frequency is between 10-15s.
+        }
+      })
+    });
+
+    function funcIntervalQuery() {
+      nebPay.queryPayInfo(serialNumber) //search transaction result from server (result upload to server by app)
+        .then(function (resp) {
+          console.log("tx result: " + resp) //resp is a JSON string
+          var respObject = JSON.parse(resp)
+          if (respObject.code === 0) {
+            //The transaction is successful 
+            clearInterval(intervalQuery) //stop the periodically query 
+            window.location.reload();
           }
         })
-    });
-    // layui.use('form', function () {
-    //   var form = layui.form;
-    //   //监听提交
-    //   form.on('submit(formDemo)', function (data) {
-    //     //layer.msg(JSON.stringify(data.field));
-    //     var dappAddress = "n1kzW2iPXVpXUvWbpZoLHYswwZvQwEaRjuX";
-    //     var to = dappAddress
-    //     var value = "0"
-    //     var callFunction = "save" //the function name to be called
-    //     var callArgs = "[\"" + data.field.gameName + "\",\"" + data.field.nickName + "\",\"" + data.field.serverName +
-    //       "\",\"" + data.field.partyName + "\",\"" + data.field.msg + "\"]";
-    //     console.log(callArgs)
-    //     //Send transaction (here is smart contract call)
-    //     serialNumber = nebPay.Call(to, value, callFunction, callArgs, options, {
-    //       listener: (res) => {
-    //         console.log('listener', res)
-    //         try {
-    //           resolve(JSON.parse(res.result))
-    //         } catch (e) {
-    //           reject(res.result)
-    //         }
-    //       }
-    //     })
-    //     return false;
-    //   });
-    // });
+        .catch(function (err) {
+          console.log(err);
+        });
+    }
   </script>
 </body>
 
