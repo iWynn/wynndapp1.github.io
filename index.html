@@ -121,7 +121,7 @@
                         </div>
                       </div>
                       <div class="layui-form-item">
-                        <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即录入</button>
+                        <button type="button" class="layui-btn" id="btn_submit" lay-filter="formDemo">立即录入</button>
                       </div>
                     </form>
                   </div>
@@ -166,7 +166,7 @@
   <script src="res/layui/layui.js"></script>
   <script type="text/javascript" src="res/js/nebPay.js"></script>
   <script type="text/javascript" src="res/js/jquery-1.8.3.min.js"></script>
-  <script>
+  <script  type="text/javascript">
     var NebPay = require("nebpay");
     var nebPay = new NebPay();
     var serialNumber; //transaction serial number
@@ -224,20 +224,16 @@
     if (typeof (webExtensionWallet) === "undefined") {
       alert("请首先安装webExtensionWallet插件");
     }
-    layui.use('form', function () {
-      var form = layui.form;
-      //监听提交
-      form.on('submit(formDemo)', function (data) {
-        //layer.msg(JSON.stringify(data.field));
-        var dappAddress = "n1kzW2iPXVpXUvWbpZoLHYswwZvQwEaRjuX";
+    $('#btn_submit').click(function(){
+      var dappAddress = "n1kzW2iPXVpXUvWbpZoLHYswwZvQwEaRjuX";
         var to = dappAddress
         var value = "0"
         var callFunction = "save" //the function name to be called
-        var callArgs = "[\"" + data.field.gameName + "\",\"" + data.field.nickName + "\",\"" + data.field.serverName +
-          "\",\"" + data.field.partyName + "\",\"" + data.field.msg + "\"]";
+        var callArgs = "[\"" + $(" input[ name='gameName' ] ").val()+ "\",\"" + $(" input[ name='nickName' ] ").val() + "\",\"" + $(" input[ name='serverName' ] ").val() +
+          "\",\"" + $(" input[ name='partyName' ] ").val() + "\",\"" + $(" input[ name='msg' ] ").val() + "\"]";
         console.log(callArgs)
         //Send transaction (here is smart contract call)
-        serialNumber = nebPay.Call(to, value, callFunction, callArgs, options, {
+        serialNumber = nebPay.call(to, value, callFunction, callArgs, {
           listener: (res) => {
             console.log('listener', res)
             try {
@@ -247,9 +243,33 @@
             }
           }
         })
-        return false;
-      });
     });
+    // layui.use('form', function () {
+    //   var form = layui.form;
+    //   //监听提交
+    //   form.on('submit(formDemo)', function (data) {
+    //     //layer.msg(JSON.stringify(data.field));
+    //     var dappAddress = "n1kzW2iPXVpXUvWbpZoLHYswwZvQwEaRjuX";
+    //     var to = dappAddress
+    //     var value = "0"
+    //     var callFunction = "save" //the function name to be called
+    //     var callArgs = "[\"" + data.field.gameName + "\",\"" + data.field.nickName + "\",\"" + data.field.serverName +
+    //       "\",\"" + data.field.partyName + "\",\"" + data.field.msg + "\"]";
+    //     console.log(callArgs)
+    //     //Send transaction (here is smart contract call)
+    //     serialNumber = nebPay.Call(to, value, callFunction, callArgs, options, {
+    //       listener: (res) => {
+    //         console.log('listener', res)
+    //         try {
+    //           resolve(JSON.parse(res.result))
+    //         } catch (e) {
+    //           reject(res.result)
+    //         }
+    //       }
+    //     })
+    //     return false;
+    //   });
+    // });
   </script>
 </body>
 
