@@ -74,7 +74,7 @@
           </div>
 
           <ul class="fly-list">
-              <div id="view"></div>
+            <div id="view"></div>
           </ul>
 
 
@@ -89,7 +89,7 @@
               <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
                 <div class="layui-tab-item layui-show">
                   <div class="layui-form layui-form-pane">
-                      <form class="layui-form" action="">
+                    <form class="layui-form" action="">
                       <div class="layui-form-item">
                         <label for="L_email" class="layui-form-label">游戏名</label>
                         <div class="layui-input-inline">
@@ -115,7 +115,7 @@
                         </div>
                       </div>
                       <div class="layui-form-item">
-                        <label for="L_vercode" class="layui-form-label" >留言</label>
+                        <label for="L_vercode" class="layui-form-label">留言</label>
                         <div class="layui-input-inline">
                           <input type="text" id="L_vercode" name="msg" autocomplete="off" class="layui-input">
                         </div>
@@ -164,13 +164,8 @@
   </div>
 
   <script src="res/layui/layui.js"></script>
-
-  <script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_30088308'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol +
-      "w.cnzz.com/c.php%3Fid%3D30088308' type='text/javascript'%3E%3C/script%3E"));
-  </script>
   <script type="text/javascript" src="res/js/nebPay.js"></script>
+  <script type="text/javascript" src="res/js/jquery-1.8.3.min.js"></script>
   <script>
     var NebPay = require("nebpay");
     var nebPay = new NebPay();
@@ -183,14 +178,9 @@
 
     function searchPublicPlan() {
       var to = dappAddress
-      var  value = "0"
-      var  callFunction = "getAll" //the function name to be called
+      var value = "0"
+      var callFunction = "getAll" //the function name to be called
       var callArgs = "" //the parameter, it's format JSON string of parameter arrays, such as'["arg"]','["arg1","arg2]'        
-      var options = {
-        //callback 是交易查询服务器地址,
-        //callback: NebPay.config.mainnetUrl //在主网查询(默认值)
-        callback: NebPay.config.testnetUrl //在测试网查询
-      };
       nebPay.simulateCall(to, value, callFunction, callArgs, {
         listener: searchHandle
       });
@@ -201,118 +191,67 @@
           return;
         }
         var result = JSON.parse(resp.result);
-        layui.use('laytpl', function(laytpl){
+        layui.use('laytpl', function (laytpl) {
 
-        var getTpl = demo.innerHTML;
-        // console.log("getTpl:"+getTpl)
-        var view = document.getElementById('view');
-        // var data=eval(jsonstr);
+          var getTpl = demo.innerHTML;
+          // console.log("getTpl:"+getTpl)
+          var view = document.getElementById('view');
+          // var data=eval(jsonstr);
 
-        laytpl(getTpl).render(result, function(html){
-          view.innerHTML = html;
-        });
+          laytpl(getTpl).render(result, function (html) {
+            view.innerHTML = html;
+          });
 
         });
       };
     }
-
     window.onload = searchPublicPlan;
-
-    //initiate the transaction with a button click, here is an example of calling a smart contract
-    function onButtonClick() {
-      var to = "n1nZwD6kRCKmSZHxkJGrNPEWrKPurvWUQ8g"; //the smart contract address of your Dapp
-      var value = "";
-      var callFunction = "getAll" //the function name to be called
-      var callArgs = "" //the parameter, it's format JSON string of parameter arrays, such as'["arg"]','["arg1","arg2]'        
-      var options = {
-        //callback 是交易查询服务器地址,
-        //callback: NebPay.config.mainnetUrl //在主网查询(默认值)
-        callback: NebPay.config.testnetUrl //在测试网查询
-      }
-
-      //Send transaction (here is smart contract call)
-      serialNumber = nebPay.simulateCall(to, value, callFunction, callArgs, options, {
-        listener: (res) => {
-          console.log('listener', res)
-          try {
-            resolve(JSON.parse(res.result))
-            
-
-          } catch (e) {
-            reject(res.result)
-          }
-        }
-      })
-      //Set a periodically query
-      intervalQuery = setInterval(function () {
-        funcIntervalQuery();
-      }, 10000); //it's recommended that the query frequency is between 10-15s.
-    }
-
-    //Query the result of the transaction. queryPayInfo returns a Promise object.
-    function funcIntervalQuery() {
-      nebPay.queryPayInfo(serialNumber) //search transaction result from server (result upload to server by app)
-        .then(function (resp) {
-          console.log("tx result: " + resp) //resp is a JSON string
-          var respObject = JSON.parse(resp)
-          if (respObject.code === 0) {
-            //The transaction is successful 
-
-            clearInterval(intervalQuery) //stop the periodically query 
-          }
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-    }
-
-    
   </script>
   <script id="demo" type="text/html">
-    {{#  layui.each(d, function(index, item){ }}
+    {{# layui.each(d, function(index, item){ }}
     <li>
       <h2>
         <a href="#">{{item.key}}</a>
       </h2>
     </li>
 
-    {{#  }); }}
-    </script>
-    <script type="text/javascript">
+    {{# }); }}
+  </script>
+  <script type="text/javascript">
+    var NebPay = require("nebpay");
+    var nebPay = new NebPay();
+    var dappAddress = "n1v8e45CvAZB3Uj6gHFPm3aEveSuzLse3Qm";
 
-    	var NebPay = require("nebpay");
-    	var nebPay = new NebPay();
-    	var dappAddress = "n1v8e45CvAZB3Uj6gHFPm3aEveSuzLse3Qm";
-
-    	if (typeof(webExtensionWallet) === "undefined") {
-	        alert("请首先安装webExtensionWallet插件");
-	    } 
-      layui.use('form', function(){
-          var form = layui.form;
-          //监听提交
-          form.on('submit(formDemo)', function(data){
-            //layer.msg(JSON.stringify(data.field));
-            var dappAddress = "n1kzW2iPXVpXUvWbpZoLHYswwZvQwEaRjuX";
-            var to = dappAddress
-            var  value = "0"
-            var  callFunction = "save" //the function name to be called
-            var callArgs = "[\"" +data.field.gameName+"\",\""+data.field.nickName+"\",\""+data.field.serverName+"\",\""+data.field.partyName+"\",\""+data.field.msg+"\"]"; 
-            console.log(callArgs)
-            //Send transaction (here is smart contract call)
-            serialNumber = nebPay.Call(to, value, callFunction, callArgs, options, {
-              listener: (res) => {
-                console.log('listener', res)
-                try {
-                  resolve(JSON.parse(res.result))
-                } catch (e) {
-                  reject(res.result)
-                }
-              }
-            })
-            return false;
-          });
-        });
-    </script>
+    if (typeof (webExtensionWallet) === "undefined") {
+      alert("请首先安装webExtensionWallet插件");
+    }
+    layui.use('form', function () {
+      var form = layui.form;
+      //监听提交
+      form.on('submit(formDemo)', function (data) {
+        //layer.msg(JSON.stringify(data.field));
+        var dappAddress = "n1kzW2iPXVpXUvWbpZoLHYswwZvQwEaRjuX";
+        var to = dappAddress
+        var value = "0"
+        var callFunction = "save" //the function name to be called
+        var callArgs = "[\"" + data.field.gameName + "\",\"" + data.field.nickName + "\",\"" + data.field.serverName +
+          "\",\"" + data.field.partyName + "\",\"" + data.field.msg + "\"]";
+        console.log(callArgs)
+        //Send transaction (here is smart contract call)
+        serialNumber = nebPay.Call(to, value, callFunction, callArgs, options, {
+          listener: (res) => {
+            console.log('listener', res)
+            try {
+              resolve(JSON.parse(res.result))
+            } catch (e) {
+              reject(res.result)
+            }
+          }
+        })
+        return false;
+      });
+    });
+  </script>
 </body>
 
 </html>
